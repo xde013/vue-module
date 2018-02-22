@@ -1,0 +1,27 @@
+{
+    "modules": [{
+            "id": "0",
+            "title": "Space dust",
+            "author": "John Doe",
+            "description": "Lorem ipsum commun reapo ban"
+        },
+        {
+            "id": "1",
+            "title": "Zeta function",
+            "author": "Will Euler",
+            "description": "Lorem ipsum zappu kenzwx"
+        },
+        {
+            "id": "2",
+            "title": "Truth detector",
+            "author": "Elvis Bowie",
+            "description": "Lorem ipsum waz no kapu"
+        },
+        {
+            "id": "3",
+            "title": "White tea",
+            "author": "Jack Head",
+            "description": "Lorem ipsum muzina po buwin"
+        }
+    ]
+}
