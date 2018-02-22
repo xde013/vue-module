@@ -1,15 +1,15 @@
 <template>
   <div class="ui container">
     <input type="file" accept=".csv, .tsv" name="modules" id="import" @change="loadCSV" v-show="debug">
-    <div class="ui text menu">
+    <div class="ui secondary pointing menu">
       <div class="header item">Sort By</div>
-      <a class="item">
+      <a class="item" :class="{ active : sortParam === 'new'}" v-on:click="sortMod('new')">
         Newest
       </a>
-      <a class="item">
+      <a class="item" :class="{ active : sortParam === 'hot'}" v-on:click="sortMod('hot')">
         Hot
       </a>
-      <a class="item active">
+      <a class="item" :class="{ active : sortParam === 'popular'}" v-on:click="sortMod('popular')">
         Most Popular
       </a>
       <div class="right menu">
@@ -92,7 +92,8 @@
       return {
         loading: false,
         debug: false,
-        searchQuery: ''
+        searchQuery: '',
+        sortParam: ''  // Defaults to random order at first render
       }
     },
     components: {
@@ -120,6 +121,12 @@
       }
     },
     methods: {
+
+      sortMod(param) {
+        let vm = this
+        vm.sortParam = param
+      },
+
       grabMods() {
         let vm = this;
         vm.loading = true;
@@ -131,6 +138,7 @@
             swal("Oups", "Something went wrong" + err, "alert")
           })
       },
+
       loadCSV(e) {
         let vm = this;
         vm.loading = true
@@ -144,6 +152,7 @@
           },
         })
       },
+
       onComplete(parsed) {
         let vm = this;
         this.$store.dispatch('loadData', parsed)
@@ -153,27 +162,48 @@
               swal("Done", "Import completed successfully", "success")
             }
           })
+      },
+      
+      cleanQuery(q) {
+        return this.$lodash.trim(q.toLowerCase())
       }
+
     },
     computed: {
+
       firstVisit() {
         return this.$store.getters.visit
       },
 
       modules() {
-        return this.$store.getters.modules
+        let vm = this
+        let modules = this.$store.getters.modules
+        switch (vm.sortParam) {
+          case 'popular':
+            return vm.$lodash.sortBy(modules, 'subs')
+            break
+          case 'new':
+            return vm.$lodash.sortBy(modules, [(m) => { return new Date(m.createdAt)}])
+            break
+          case 'hot':
+            return this.$store.getters.modules // To implement
+          default:
+            return this.$store.getters.modules
+            break;
+        }
+        // return vm.sortParam.length > 0 ? vm.$lodash.sortBy(modules, [vm.sortParam]) : this.$store.getters.modules
       },
 
       filteredMods() {
         let vm = this
         return this.$store.getters.modules.filter((mod) => {
-          return mod.title.concat(mod.description).toLowerCase().indexOf(vm.searchQuery.toLowerCase()) >= 0
+          return mod.title.concat(mod.description).toLowerCase().indexOf(vm.cleanQuery(vm.searchQuery)) >= 0
         })
       },
 
       searching() {
         let vm = this
-        return vm.searchQuery.length > 0
+        return vm.cleanQuery(vm.searchQuery).length > 0
       },
 
       modulesCount() {
