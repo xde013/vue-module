@@ -22,7 +22,6 @@ export const mutations = {
                 if ('modules' in data) { // Trivial check for now
                     state.modules = data.modules
                 }
-                state.modules = []
             })
             .catch(err => {
                 console.log(err)
