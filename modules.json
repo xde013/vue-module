@@ -3,25 +3,33 @@
             "id": "0",
             "title": "Space dust",
             "author": "John Doe",
-            "description": "Lorem ipsum commun reapo ban"
+            "description": "Lorem ipsum commun reapo ban",
+            "subs": "42",
+            "createdAt": "2017-03-03"
         },
         {
             "id": "1",
             "title": "Zeta function",
             "author": "Will Euler",
-            "description": "Lorem ipsum zappu kenzwx"
+            "description": "Lorem ipsum zappu kenzwx",
+            "subs": "112",
+            "createdAt": "2017-06-26"
         },
         {
             "id": "2",
             "title": "Truth detector",
             "author": "Elvis Bowie",
-            "description": "Lorem ipsum waz no kapu"
+            "description": "Lorem ipsum waz no kapu",
+            "subs": "39",
+            "createdAt": "2016-12-12"
         },
         {
             "id": "3",
             "title": "White tea",
             "author": "Jack Head",
-            "description": "Lorem ipsum muzina po buwin"
+            "description": "Lorem ipsum muzina po buwin",
+            "subs": "233",
+            "createdAt": "2018-01-05"
         }
     ]
 }
