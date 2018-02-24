@@ -34,7 +34,7 @@
     },
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        msg: 'Ryan Bourhil <bourhilr@gmail.com'
       }
     }
   }
