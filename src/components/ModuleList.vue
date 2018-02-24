@@ -180,10 +180,10 @@
         let modules = this.$store.getters.modules
         switch (vm.sortParam) {
           case 'popular':
-            return vm.$lodash.sortBy(modules, 'subs')
+            return vm.$lodash.sortBy(modules, [(m)=> { return - this.$lodash.parseInt(m.subs)}])
             break
           case 'new':
-            return vm.$lodash.sortBy(modules, [(m) => { return new Date(m.createdAt)}])
+            return vm.$lodash.sortBy(modules, [(m) => { return - new Date(m.createdAt)}])
             break
           case 'hot':
             return this.$store.getters.modules // To implement
