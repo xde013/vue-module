@@ -60,9 +60,7 @@
       let vm = this
       if (this.$route.params.module) {
         vm.module = this.$route.params.module
-        let author = vm.module.author.split(" ")
-        vm.firstName = author[0] // There's certainly better way to do this
-        vm.lastName = author[1]
+        vm.authorName = vm.module.author
         vm.editing = true
       } else {
         vm.reset()
@@ -122,8 +120,17 @@
       }
     },
     computed: {
-      authorName() {
-        return this.firstName + " " + this.lastName
+      authorName: {
+        get: function () {
+          let vm = this
+          return vm.firstName + ' ' + vm.lastName
+        },
+        set: function (val) {
+          let vm = this
+          let names = val.split(' ')
+          vm.firstName = names[0]
+          vm.lastName = names[names.length - 1]
+        }
       },
       btnText() {
         let vm = this
