@@ -87,20 +87,21 @@
         vm.submiting = true
         let module = vm.module
         module.author = vm.authorName
+        module.createdAt = vm.todayDate()
+        module.subs = 0
         this.$store.dispatch('addMod', module)
           .then(() => {
             console.log("Action dipatched..")
             swal("Done", "Your module have been created succesfully!", "success")
               .then(() => {
-                vm.submiting = false
                 vm.reset()
               })
           })
           .catch((err) => {
-            vm.submiting = false
             swal("Oh no..", "Sorry something went wrong:" + err, "warning")
             vm.reset()
           })
+          .finally(() => vm.submiting = false)
       },
 
       updateMod(module) {
@@ -109,7 +110,6 @@
         module.author = vm.authorName
         this.$store.dispatch('updateMod', module)
           .then((done) => {
-            vm.submiting = false
             swal('Updated', 'Your course have been updated succesfuly', 'success')
               .then((ok) => {
                 this.$router.push({
@@ -117,6 +117,13 @@
                 })
               })
           })
+          .finally(() => vm.submiting = false)
+      },
+
+      todayDate() {
+        const d = new Date().getTime()
+        return d
+         // return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
       }
     },
     computed: {
@@ -140,8 +147,3 @@
   }
 
 </script>
-
-<style>
-
-
-</style>

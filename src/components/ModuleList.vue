@@ -79,6 +79,8 @@
         </div>
       </div>
     </div>
+    <div class="ui dimmer" :class="{active: this.firstVisit}">
+  </div>
   </div>
 </template>
 
@@ -115,6 +117,7 @@
               vm.grabMods()
               this.$store.dispatch('visit')
             } else {
+              window.location.href = "./404.html"
               console.log("Goodbye my friend..")
             }
           })
@@ -158,10 +161,10 @@
         this.$store.dispatch('loadData', parsed)
           .then(() => {
             if (this.progress === 100) {
-              vm.loading = false
               swal("Done", "Import completed successfully", "success")
             }
           })
+          .finally(() => vm.loading = false)
       },
       
       cleanQuery(q) {
@@ -183,7 +186,7 @@
             return vm.$lodash.sortBy(modules, [(m)=> { return - this.$lodash.parseInt(m.subs)}])
             break
           case 'new':
-            return vm.$lodash.sortBy(modules, [(m) => { return - new Date(m.createdAt)}])
+            return vm.$lodash.sortBy(modules, [(m) => { return - new Date(m.createdAt).getTime()}])
             break
           case 'hot':
             return this.$store.getters.modules // To implement
