@@ -1,10 +1,10 @@
 <template>
-
+  <div/>
 </template>
 
 <script>
   export default {
-    name: 'fallback',
+    name: 'Fallback',
     beforeMount() {
        window.location.href = "./404.html";
     }

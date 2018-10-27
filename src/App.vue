@@ -1,47 +1,55 @@
 <template>
-  <div id="app" class="ui row">
-    <!-- <img src="./assets/logo.png"> -->
-    <div class="ui menu">
-      <div class="header item">
-       <a href="https://inteach.io/">InTeach </a>
-      </div>
-      <a class="item active">
-         <router-link :to="{name: 'home'}"> Courses </router-link>
-      </a>
-      <a class="item">
-        Utilisateurs
-      </a>
-      <div class="right menu">
-        <a class="item">
-          About us
-        </a>
-        <div class="item">
-          <div class="ui button">Log out </div>
-        </div>
-      </div>
-    </div>
-    <router-view></router-view>
+  <div 
+    id="app" 
+    class="ui row">
+    <NavBar/>
+    <router-view/>
+    <div 
+      :class="{active : loading}" 
+      class="ui large loader"/>
   </div>
 </template>
 
 <script>
-  import ModuleList from './components/ModuleList'
-
+  import NavBar from './components/NavBar'
   export default {
-    name: 'app',
+    name: 'App',
     components: {
-      ModuleList
+      NavBar
     },
     data() {
       return {
+        loading: false,
         msg: 'Ryan Bourhil <bourhilr@gmail.com'
       }
-    }
+    },
+    computed: {
+      consent() {
+        return this.$store.getters.userConsent
+      }
+    },
+    watch: {
+      consent(newValue) {
+        const vm = this
+        // Fetch modules only when user give consent
+        if (newValue) vm.grabMods()
+      }
+    },
+    methods: {
+      grabMods() {
+        const vm = this;
+        vm.loading = true;
+        this.$store.dispatch('fetchModule')
+          .finally(() => vm.loading = false)
+      }
+    },
   }
 
 </script>
 
 <style>
-
-
+#app {
+  margin-top: 48px;
+  margin-bottom: 20px;
+}
 </style>

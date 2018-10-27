@@ -3,37 +3,71 @@
     <div class="center aligned onecolumn row">
       <div class="column">
         <div class="ui segment">
-          <form class="ui large form" v-on:submit.prevent="submitMod()">
+          <form 
+            class="ui large form" 
+            @submit.prevent="submitMod()">
             <h4 class="ui dividing header">Module Information</h4>
             <div class="field">
               <label>Title</label>
-              <input type="text" name="modTitle" placeholder="Specify a title for your module.." v-model="module.title" required>
+              <input 
+                v-model="module.title" 
+                type="text" 
+                name="modTitle" 
+                placeholder="Specify a title for your module.." 
+                required>
             </div>
             <div class="field">
               <label>Author name</label>
               <div class="two fields">
                 <div class="field">
-                  <input type="text" name="firstName" placeholder="First Name" v-model="firstName" required>
+                  <input 
+                    v-model="firstName" 
+                    type="text" 
+                    name="firstName" 
+                    placeholder="First Name" 
+                    required>
                 </div>
                 <div class="field">
-                  <input type="text" name="lastName" placeholder="Last Name" v-model="lastName" required>
+                  <input 
+                    v-model="lastName" 
+                    type="text" 
+                    name="lastName" 
+                    placeholder="Last Name" 
+                    required>
                 </div>
               </div>
             </div>
             <div class="field">
               <label>Description</label>
-              <textarea rows="2" placeholder="What's your module about?" v-model="module.description" required></textarea>
+              <textarea 
+                v-model="module.description" 
+                rows="2" 
+                placeholder="What's your module about?" 
+                required/>
             </div>
-            <div class="field" v-show="debug">
-              <input type="text" name="lastName" placeholder="Full Name" v-model="authorName" required>
+            <div 
+              v-show="debug" 
+              class="field">
+              <input 
+                v-model="authorName" 
+                type="text" 
+                name="lastName" 
+                placeholder="Full Name" 
+                required>
             </div>
-            <button type="submit" class="ui fluid large teal bottom attached button" :class="{loading: submiting}"> {{ btnText }} </button>
+            <button 
+              :class="{loading: submiting}" 
+              type="submit" 
+              class="ui fluid large teal bottom attached button"> {{ btnText }} </button>
           </form>
           <br>
-          <div class="ui animated button" @click="goBack()" tabindex="0">
+          <div 
+            class="ui animated button" 
+            tabindex="0" 
+            @click="goBack()">
             <div class="visible content">Back</div>
             <div class="hidden content">
-              <i class="left arrow icon"></i>
+              <i class="left arrow icon"/>
             </div>
           </div>
         </div>
@@ -44,7 +78,7 @@
 
 <script>
   export default {
-    name: 'moduleForm',
+    name: 'ModuleForm',
     data() {
       return {
         debug: false,
@@ -53,6 +87,24 @@
         module: {},
         submiting: false,
         editing: false
+      }
+    },
+    computed: {
+      authorName: {
+        get: function () {
+          let vm = this
+          return vm.firstName + ' ' + vm.lastName
+        },
+        set: function (val) {
+          let vm = this
+          let names = val.split(' ')
+          vm.firstName = names[0]
+          vm.lastName = names[names.length - 1]
+        }
+      },
+      btnText() {
+        let vm = this
+        return vm.editing ? "Update" : "Submit"
       }
     },
 
@@ -91,14 +143,13 @@
         module.subs = 0
         this.$store.dispatch('addMod', module)
           .then(() => {
-            console.log("Action dipatched..")
-            swal("Done", "Your module have been created succesfully!", "success")
+            this.$swal("Done", "Your module have been created succesfully!", "success")
               .then(() => {
                 vm.reset()
               })
           })
           .catch((err) => {
-            swal("Oh no..", "Sorry something went wrong:" + err, "warning")
+            this.$swal("Oh no..", "Sorry something went wrong:" + err, "warning")
             vm.reset()
           })
           .finally(() => vm.submiting = false)
@@ -109,9 +160,9 @@
         vm.submiting = true
         module.author = vm.authorName
         this.$store.dispatch('updateMod', module)
-          .then((done) => {
-            swal('Updated', 'Your course have been updated succesfuly', 'success')
-              .then((ok) => {
+          .then(() => {
+            this.$swal('Updated', 'Your course have been updated succesfuly', 'success')
+              .then(() => {
                 this.$router.push({
                   name: 'home'
                 })
@@ -126,24 +177,6 @@
          // return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
       }
     },
-    computed: {
-      authorName: {
-        get: function () {
-          let vm = this
-          return vm.firstName + ' ' + vm.lastName
-        },
-        set: function (val) {
-          let vm = this
-          let names = val.split(' ')
-          vm.firstName = names[0]
-          vm.lastName = names[names.length - 1]
-        }
-      },
-      btnText() {
-        let vm = this
-        return vm.editing ? "Update" : "Submit"
-      }
-    }
   }
 
 </script>

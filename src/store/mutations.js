@@ -1,36 +1,31 @@
-import { resolve } from "path";
 const modKeys = ["id", "title", "author", "description"]
 export const STORAGE_KEY = 'inteach-app' // Maybe you want to persist data in LocalStorage
 
 export const state = {
     modules: [],
     progress: 0,
-    firstVisit: true,
+    consent: false
 }
 
 export const mutations = {
-    VISIT(state) {
-        state.firstVisit = false;
+    CONSENT(state) {
+        state.consent = true;
     },
 
     FETCH_MODULE(state) {
         fetch('/modules.json')
-            .then((r) => {
-                return r.json()
-            })
+            .then((result) => result.json())
             .then((data) => {
                 if ('modules' in data) { // Trivial check for now
                     state.modules = data.modules
                 }
             })
-            .catch(err => {
-                console.log(err)
+            .catch(() => {
                 state.modules = []
             })
     },
 
     LOAD_DATA(state, { data }) {
-        console.log("Action dispatched and mutation commited..")
         state.progress = 0
         let increment = 100 / data.length
         data.forEach(element => {
@@ -63,12 +58,12 @@ export const mutations = {
 }
 
 export const actions = {
-    visit({ commit }) {
-        commit('VISIT')
+    giveConsent({ commit }) {
+        commit('CONSENT')
     },
 
     fetchModule({ commit }) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             setTimeout(() => {
                 commit('FETCH_MODULE')
                 resolve();
@@ -77,7 +72,7 @@ export const actions = {
     },
 
     loadData({ commit }, payload) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             setTimeout(() => {
                 commit('LOAD_DATA', payload)
                 resolve()
@@ -86,17 +81,16 @@ export const actions = {
     },
 
     addMod({ commit }, payload) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             setTimeout(() => {
                 commit('ADD_MOD', payload)
-                console.log('Mutation commited..')
                 resolve()
             }, 1400);
         })
     },
 
     updateMod({ commit }, module) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             setTimeout(() => {
                 commit('UPDATE_MOD', module)
                 resolve()
@@ -105,7 +99,7 @@ export const actions = {
     },
 
     removeMod({ commit }, module) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             setTimeout(() => {
                 commit('DEL_MOD', module)
                 resolve()
@@ -115,16 +109,16 @@ export const actions = {
 }
 
 export const getters = {
-    visit: state => {
-        return state.firstVisit
-    },
-
     modules: state => {
         return state.modules
     },
 
     modulesCount: state => {
         return state.modules.length
+    },
+
+    userConsent: state => {
+        return state.consent
     },
 
     progress: state => {
